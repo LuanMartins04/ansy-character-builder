@@ -7,3 +7,5 @@ vite.config.d.ts
 .tmp-pdfdeps/
 .DS_Store
 .chrome-*/
+
+.vercel
