@@ -1285,7 +1285,7 @@ function Skills({
       </h2>
       <div className="skill-catalog">
         {available.map(([id, name, attribute, cost]) => {
-          const attr = attributes.find((a) => a.id === attribute)!,
+          const attr = attributes.find((a) => a.id === attribute),
             rule = skillSpecializationRules[id],
             specializationCount = character.selectedSkills.filter(
               (instance) => instance.split(":")[0] === id,
@@ -1303,7 +1303,7 @@ function Skills({
             <button onClick={() => (rule ? openSpecialization(id) : addSkill(id))}>
               <span>
                 <small>
-                  {attr.short} ·{" "}
+                  {attr?.short || "SEM ATRIBUTO"} ·{" "}
                   {cost === 1 ? "FÁCIL" : cost === 2 ? "MÉDIA" : "DIFÍCIL"} ·{" "}
                   {rule
                     ? "CUSTO VARIÁVEL"
