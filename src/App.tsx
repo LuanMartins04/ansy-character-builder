@@ -59,6 +59,7 @@ import {
   skillCost,
   skillIncreaseRequirement,
   skillNh,
+  skillPointCost,
   skillPointsSpent,
   skillTestNh,
   spentXp,
@@ -1359,7 +1360,7 @@ function Skills({
               grad = character.skills[instance] || 0,
               attr = attributes.find((a) => a.id === attribute)!,
               rule = skillSpecializationRules[base],
-              cost = character.skillCosts[instance] || defaultCost,
+              cost = skillPointCost(character, instance),
               blocked = skillIncreaseRequirement(character, instance),
               baseNh = skillNh(character, instance, attribute),
               testNh = skillTestNh(character, instance, attribute);
@@ -1816,7 +1817,7 @@ function Traits({
                 if (!def) return null;
                 const name = def[1],
                   spec = character.skillSpecializations[instance],
-                  cost = (character.skillCosts[instance] || def[3]) * 2;
+                  cost = skillPointCost(character, instance) * 2;
                 return (
                   <option key={instance} value={instance}>
                     {name}

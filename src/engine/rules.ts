@@ -103,7 +103,9 @@ export function racialPassiveEffects(character:Character){
   return {naturalPhysicalDamageReduction:0,inhaledDamageMultiplier:1,heldBreathMultiplier:1}
 }
 export function attributeXp(character:Character) { return Object.values(character.attributes).reduce((sum,value)=>sum + (value-10)*10,0) }
-export function skillPointsSpent(character:Character) { return Object.entries(character.skills).reduce((sum,[instance,graduation])=>{const base=instance.split(':')[0];const fallback=skills.find(([id])=>id===base)?.[3]||1;return sum+graduation*(character.skillCosts[instance]||fallback)},0) }
+/** Perícias comuns sempre usam o custo publicado. Só Armas varia por especialização. */
+export function skillPointCost(character:Character,instance:string){const base=instance.split(':')[0];const published=skills.find(([id])=>id===base)?.[3]||1;return base==='armas'?(character.skillCosts[instance]||published):published}
+export function skillPointsSpent(character:Character) { return Object.entries(character.skills).reduce((sum,[instance,graduation])=>sum+graduation*skillPointCost(character,instance),0) }
 export function freeSkillPoints(character:Character){return finalAttribute(character,'inteligencia')+Math.max(0,character.age-15)}
 export function skillCost(character:Character) { return Math.max(0,skillPointsSpent(character)-freeSkillPoints(character)) }
 export function maxSkillGraduation(character:Character){return Math.max(0,Math.floor(character.age/4)+difference(finalAttribute(character,'inteligencia')))}
@@ -112,7 +114,7 @@ export function traitsCost(character:Character) {
   const antecedentCost=(appearanceCosts[character.antecedents.appearance]||0)+character.antecedents.resources*2+character.antecedents.literacy+character.antecedents.renown*2
   const tiered:Record<string,number[]>={'resistencia-magia':[4,8],sorte:[2,16],mediunidade:[2,4,8,16],'visao-noturna':[4,8],aliado:[2,4,8,4,8,16],inimigo:[-2,-4],juramento:[-2,-4]}
   const repeatable=new Set(['visao-agucada','faro-agucado','audicao-agucada','duro-matar','vitalidade-extra','fadiga-extra','poder-oculto','determinado','hipoalgia','ma-reputacao'])
-  const costOf=(x:{id:string;cost:number})=>{const level=Math.max(1,character.traitLevels[x.id]||1);if(x.id==='habilidade-inata'){const skillId=character.traitDetails[x.id]||'',base=skillId.split(':')[0],difficulty=character.skillCosts[skillId]||skills.find(([id])=>id===base)?.[3]||1;return difficulty*2}return tiered[x.id]?.[Math.min(level,tiered[x.id].length)-1]??x.cost*(repeatable.has(x.id)?level:1)}
+  const costOf=(x:{id:string;cost:number})=>{const level=Math.max(1,character.traitLevels[x.id]||1);if(x.id==='habilidade-inata'){const skillId=character.traitDetails[x.id]||'';return skillPointCost(character,skillId)*2}return tiered[x.id]?.[Math.min(level,tiered[x.id].length)-1]??x.cost*(repeatable.has(x.id)?level:1)}
   return antecedentCost+qualities.filter(x=>character.qualities.includes(x.id)).reduce((s,x)=>s+costOf(x),0)
     + defects.filter(x=>character.defects.includes(x.id)).reduce((s,x)=>s+costOf(x),0)
     - character.peculiarities.length
