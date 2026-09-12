@@ -121,7 +121,10 @@ export default function App() {
   const index = steps.findIndex((s) => s.id === step);
   const xp = remainingXp(character),
     calculated = derived(character),
-    issues = validation(character);
+    issues = validation(character),
+    skillReserve = freeSkillPoints(character),
+    skillCostBeforeReserve = skillPointsSpent(character),
+    skillReserveRemaining = Math.max(0, skillReserve - skillCostBeforeReserve);
   const update = <K extends keyof Character>(key: K, value: Character[K]) =>
     setCharacter((c) => ({ ...c, [key]: value }));
   useEffect(() => {
@@ -291,7 +294,7 @@ export default function App() {
               Investido <b>{spentXp(character)}</b>
             </span>
             <span>
-              Perícias pela idade <b>+{Math.max(0, character.age - 15)}</b>
+              Reserva de perícias <b>{skillReserveRemaining} / {skillReserve}</b>
             </span>
           </div>
           <div className="xp-meter">
@@ -430,8 +433,10 @@ function Identity({
             onChange={(e) => update("age", Number(e.target.value))}
           />
           <small>
-            {Math.max(0, character.age - 15)} pontos gratuitos de perícia pela
-            experiência de vida. Idade não altera o XP inicial.
+            {Math.max(0, character.age - 15)} pela experiência de vida +{" "}
+            {finalAttribute(character, "inteligencia")} pela Inteligência ={" "}
+            {freeSkillPoints(character)} pontos gratuitos para custos de perícia.
+            Idade não altera o XP inicial.
           </small>
         </div>
         <div className="field">
@@ -1249,14 +1254,22 @@ function Skills({
       />
       <div className="skills-summary">
         <span>
-          Pontos gratuitos{" "}
+          Reserva gratuita usada{" "}
           <b>
             {Math.min(points, free)} / {free}
           </b>
           <small> INT + anos após 15</small>
         </span>
         <span>
-          XP adicional <b>{total}</b>
+          Reserva restante <b>{Math.max(0, free - points)}</b>
+          <small> ainda cobre graduações</small>
+        </span>
+        <span>
+          Custo bruto <b>{points} XP</b>
+          <small> antes da reserva</small>
+        </span>
+        <span>
+          XP descontado <b>{total}</b>
         </span>
         <span>
           Graduação máxima <b>{maximum}</b>
