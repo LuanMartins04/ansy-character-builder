@@ -435,17 +435,36 @@ function Identity({
           </small>
         </div>
         <div className="field">
-          <label>XP inicial</label>
-          <select
-            value={character.startingXp}
+          <label>Orçamento inicial de XP</label>
+          <div className="xp-picker">
+            <input
+              aria-label="Quantidade inicial de XP"
+              type="number"
+              min="50"
+              max="80"
+              step="1"
+              value={character.startingXp}
+              onChange={(e) => update("startingXp", Number(e.target.value))}
+            />
+            <b>XP</b>
+          </div>
+          <input
+            className="xp-slider"
+            aria-label="Ajustar orçamento inicial de XP"
+            type="range"
+            min="50"
+            max="80"
+            step="1"
+            value={Math.max(50, Math.min(80, character.startingXp))}
             onChange={(e) => update("startingXp", Number(e.target.value))}
-          >
-            {[...Array.from({ length: 21 }, (_, i) => 50 + i), 75, 80].map(
-              (x) => (
-                <option key={x}>{x}</option>
-              ),
-            )}
-          </select>
+          />
+          <div className="xp-presets" aria-label="Orçamentos sugeridos">
+            {[50, 60, 70, 75, 80].map((xp) => (
+              <button type="button" className={character.startingXp === xp ? "active" : ""} key={xp} onClick={() => update("startingXp", xp)}>
+                {xp}
+              </button>
+            ))}
+          </div>
           <small>
             50–70 XP; 75 ou 80 apenas se o Narrador definir personagens mais
             poderosos.
