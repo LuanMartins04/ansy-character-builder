@@ -108,7 +108,9 @@ export function skillPointCost(character:Character,instance:string){const base=i
 export function skillPointsSpent(character:Character) { return Object.entries(character.skills).reduce((sum,[instance,graduation])=>sum+graduation*skillPointCost(character,instance),0) }
 export function freeSkillPoints(character:Character){return finalAttribute(character,'inteligencia')+Math.max(0,character.age-15)}
 export function skillCost(character:Character) { return Math.max(0,skillPointsSpent(character)-freeSkillPoints(character)) }
-export function maxSkillGraduation(character:Character){return Math.max(0,Math.floor(character.age/4)+difference(finalAttribute(character,'inteligencia')))}
+/** P. 56: idade ÷ 4 + [INT]. O colchete se refere ao valor inteiro de
+ * Inteligência, não à sua Diferença em relação a 10. */
+export function maxSkillGraduation(character:Character){return Math.max(0,Math.floor(character.age/4)+finalAttribute(character,'inteligencia'))}
 export function traitsCost(character:Character) {
   const appearanceCosts:Record<string,number>={hediondo:-8,'muito-feio':-4,feio:-2,normal:0,atraente:2,bonito:4,'muito-bonito':8}
   const antecedentCost=(appearanceCosts[character.antecedents.appearance]||0)+character.antecedents.resources*2+character.antecedents.literacy+character.antecedents.renown*2
