@@ -1358,7 +1358,7 @@ function Skills({
             if (!def) return null;
             const [, name, attribute, defaultCost] = def,
               grad = character.skills[instance] || 0,
-              attr = attributes.find((a) => a.id === attribute)!,
+              attr = attributes.find((a) => a.id === attribute),
               rule = skillSpecializationRules[base],
               cost = skillPointCost(character, instance),
               blocked = skillIncreaseRequirement(character, instance),
@@ -1380,7 +1380,7 @@ function Skills({
               <article className="skill-row expanded" key={instance}>
                 <div>
                   <small>
-                    {attr.short} ·{" "}
+                    {attr?.short || "SEM ATRIBUTO"} ·{" "}
                     {cost === 1 ? "FÁCIL" : cost === 2 ? "MÉDIA" : "DIFÍCIL"}
                     {weightAffectedSkills.has(base)
                       ? " · AFETADA POR PESO"

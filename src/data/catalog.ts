@@ -79,9 +79,9 @@ export const skills = [
   ['persuadir','Persuadir','porte',2], ['poliorcetica','Poliorcética','inteligencia',2], ['prestigiditacao','Prestidigitação','agilidade',3],
   ['primeiros-socorros','Primeiros Socorros','inteligencia',1], ['rastrear','Rastrear','percepcao',3], ['rituais','Rituais','inteligencia',3],
   ['saber','Saber / Ofício','inteligencia',2], ['sentir','Sentir','percepcao',1], ['sobrevivencia','Sobrevivência','percepcao',2],
-  ['idioma','Idioma','inteligencia',1], ['montar','Montar','porte',2], ['natacao','Natação','vigor',2],
+  ['idioma','Idioma','nenhum',1], ['montar','Montar','porte',2], ['natacao','Natação','vigor',2],
   ['pilotar','Pilotar','inteligencia',3], ['sacar-rapido','Sacar Rápido','agilidade',1], ['tortura','Tortura','porte',2],
-  ['esfera','Esfera de Magia','inteligencia',3], ['etiqueta-alien','Etiqueta Alien','inteligencia',3], ['conhecimento-terreno','Conhecimento do Terreno','inteligencia',2],
+  ['esfera','Esfera de Magia','nenhum',3], ['etiqueta-alien','Etiqueta Alien','inteligencia',3], ['conhecimento-terreno','Conhecimento do Terreno','inteligencia',2],
 ] as const
 
 export const skillSpecializationRules: Record<string,{label:string;mode:'text'|'options';options?:{name:string;cost?:number}[]}> = {
